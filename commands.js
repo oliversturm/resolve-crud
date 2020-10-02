@@ -1,7 +1,5 @@
 const { doesNotExist, exists, hasFields } = require('./validation');
-
-const extractFieldNames = (fields) =>
-  fields.map((f) => (typeof f === 'string' ? f : f.name));
+const { extractFieldNames } = require('./utils');
 
 const buildEventPayload = (spec, command) =>
   Object.assign(

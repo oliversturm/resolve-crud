@@ -1,8 +1,4 @@
-const {
-  crudCommands,
-  extractFieldNames,
-  buildEventPayload,
-} = require('./commands');
+const { crudCommands, buildEventPayload } = require('./commands');
 
 const simpleProductSpec = {
   name: 'Product',
@@ -153,11 +149,6 @@ test('delete command with callbacks', () => {
 
   expect(spec.validateDeleteCommand).toHaveBeenCalledWith(cmd);
   expect(spec.finalizeDeleteEvent).toHaveBeenCalledWith(ev, cmd);
-});
-
-test('extractFieldNames', () => {
-  const fields = ['field1', { name: 'field2' }];
-  expect(extractFieldNames(fields)).toEqual(['field1', 'field2']);
 });
 
 test('buildEventPayload', () => {
