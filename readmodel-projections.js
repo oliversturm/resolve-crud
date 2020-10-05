@@ -45,9 +45,7 @@ const crudProjections = (spec) =>
     Init: initHandler(spec),
 
     [eventName('created', `${baseName}_CREATED`)]: createdHandler(spec),
-
     [eventName('updated', `${baseName}_UPDATED`)]: updatedHandler(spec),
-
     [eventName('deleted', `${baseName}_DELETED`)]: deletedHandler(spec),
   }))(
     spec.modifyEventName || defaultEventName,
