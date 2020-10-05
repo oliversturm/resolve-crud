@@ -1,14 +1,20 @@
 {
   "name": "resolve-crud",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "Automatic CRUD aggregates and read models for reSolve",
   "main": "index.js",
   "scripts": {
     "test": "jest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "reSolve"
+  ],
+  "author": "Oliver Sturm <oliver@oliversturm.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oliversturm/resolve-crud/issues"
+  },
+  "homepage": "https://github.com/oliversturm/resolve-crud#readme",
   "devDependencies": {
     "eslint": "^7.10.0",
     "eslint-plugin-jest": "^24.0.2",
