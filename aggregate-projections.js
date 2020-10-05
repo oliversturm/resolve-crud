@@ -25,21 +25,25 @@ const deletedHandler = (spec) => (aggregate, event) => {
 
 const defaultEventName = (_, x) => x;
 
-const crudProjections = (spec) => ({
-  Init: () => spec.initial,
-  [(spec.modifyEventName || defaultEventName)(
-    'created',
-    `CRUD_${spec.name.toUpperCase()}_CREATED`
-  )]: createdHandler(spec),
-  [(spec.modifyEventName || defaultEventName)(
-    'updated',
-    `CRUD_${spec.name.toUpperCase()}_UPDATED`
-  )]: updatedHandler(spec),
-  [(spec.modifyEventName || defaultEventName)(
-    'deleted',
-    `CRUD_${spec.name.toUpperCase()}_DELETED`
-  )]: deletedHandler(spec),
-});
+const crudProjections = (spec) =>
+  ((eventName) => ({
+    Init: () => spec.initial,
+
+    [eventName(
+      'created',
+      `CRUD_${spec.name.toUpperCase()}_CREATED`
+    )]: createdHandler(spec),
+
+    [eventName(
+      'updated',
+      `CRUD_${spec.name.toUpperCase()}_UPDATED`
+    )]: updatedHandler(spec),
+
+    [eventName(
+      'deleted',
+      `CRUD_${spec.name.toUpperCase()}_DELETED`
+    )]: deletedHandler(spec),
+  }))(spec.modifyEventName || defaultEventName);
 
 module.exports = {
   crudProjections,
