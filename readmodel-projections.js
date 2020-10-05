@@ -17,7 +17,7 @@ const initHandler = (spec) => (store) =>
 const createdHandler = (spec) => (store, event) =>
   store
     .insert(tableName(spec), {
-      payload: event.payload,
+      ...event.payload,
       id: event.aggregateId,
     })
     .then(() =>

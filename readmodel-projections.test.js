@@ -77,7 +77,7 @@ test('created handler', () => {
     expect(pr).toBeUndefined();
     expect(store.insert).toHaveBeenCalledWith('CRUD_Product', {
       id: '99',
-      payload: { val: 42 },
+      val: 42,
     });
   });
 });
