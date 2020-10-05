@@ -56,13 +56,142 @@ test('init handler with continuation', () => {
   };
 
   return res.Init(store).then((pr) => {
-    expect(pr).toBeUndefined();
-
-    expect(store.defineTable).toHaveBeenCalledWith('CRUD_Product', {
-      indexes: { id: 'string' },
-      fields: ['name', 'price'],
-    });
-
     expect(spec.readModelInitContinuation).toHaveBeenCalledTimes(1);
+  });
+});
+
+test('created handler', () => {
+  const res = crudProjections(simpleProductSpec);
+
+  const store = {
+    insert: jest.fn(() => Promise.resolve()),
+  };
+
+  const event = {
+    type: 'CRUD_PRODUCT_CREATED',
+    aggregateId: '99',
+    payload: { val: 42 },
+  };
+
+  return res.CRUD_PRODUCT_CREATED(store, event).then((pr) => {
+    expect(pr).toBeUndefined();
+    expect(store.insert).toHaveBeenCalledWith('CRUD_Product', {
+      id: '99',
+      payload: { val: 42 },
+    });
+  });
+});
+
+test('created handler with continuation', () => {
+  const spec = {
+    ...simpleProductSpec,
+    readModelCreatedContinuation: jest.fn(),
+  };
+  const res = crudProjections(spec);
+
+  const store = {
+    insert: jest.fn(() => Promise.resolve()),
+  };
+
+  const event = {
+    type: 'CRUD_PRODUCT_CREATED',
+    aggregateId: '99',
+    payload: { val: 42 },
+  };
+
+  return res.CRUD_PRODUCT_CREATED(store, event).then((pr) => {
+    expect(spec.readModelCreatedContinuation).toHaveBeenCalledTimes(1);
+  });
+});
+
+test('updated handler', () => {
+  const res = crudProjections(simpleProductSpec);
+
+  const store = {
+    update: jest.fn(() => Promise.resolve()),
+  };
+
+  const event = {
+    type: 'CRUD_PRODUCT_UPDATED',
+    aggregateId: '99',
+    payload: { val: 42 },
+  };
+
+  return res.CRUD_PRODUCT_UPDATED(store, event).then((pr) => {
+    expect(pr).toBeUndefined();
+    expect(store.update).toHaveBeenCalledWith(
+      'CRUD_Product',
+      {
+        id: '99',
+      },
+      {
+        $set: { val: 42 },
+      }
+    );
+  });
+});
+
+test('updated handler with continuation', () => {
+  const spec = {
+    ...simpleProductSpec,
+    readModelUpdatedContinuation: jest.fn(),
+  };
+  const res = crudProjections(spec);
+
+  const store = {
+    update: jest.fn(() => Promise.resolve()),
+  };
+
+  const event = {
+    type: 'CRUD_PRODUCT_UPDATED',
+    aggregateId: '99',
+    payload: { val: 42 },
+  };
+
+  return res.CRUD_PRODUCT_UPDATED(store, event).then((pr) => {
+    expect(spec.readModelUpdatedContinuation).toHaveBeenCalledTimes(1);
+  });
+});
+
+test('deleted handler', () => {
+  const res = crudProjections(simpleProductSpec);
+
+  const store = {
+    delete: jest.fn(() => Promise.resolve()),
+  };
+
+  const event = {
+    type: 'CRUD_PRODUCT_DELETED',
+    aggregateId: '99',
+    payload: {},
+  };
+
+  return res.CRUD_PRODUCT_DELETED(store, event).then((pr) => {
+    expect(pr).toBeUndefined();
+    expect(store.delete).toHaveBeenCalledWith('CRUD_Product', {
+      id: '99',
+    });
+  });
+});
+
+test('deleted handler with continuation', () => {
+  const spec = {
+    ...simpleProductSpec,
+    readModelDeletedContinuation: jest.fn(),
+  };
+  const res = crudProjections(spec);
+
+  const store = {
+    delete: jest.fn(() => Promise.resolve()),
+  };
+
+  const event = {
+    type: 'CRUD_PRODUCT_DELETED',
+    aggregateId: '99',
+    payload: {},
+  };
+
+  return res.CRUD_PRODUCT_DELETED(store, event).then((pr) => {
+    expect(spec.readModelDeletedContinuation).toHaveBeenCalledTimes(1);
   });
 });

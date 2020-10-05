@@ -15,7 +15,7 @@ const initHandler = (spec) => (store) =>
 const createdHandler = (spec) => (store, event) =>
   store
     .insert(tableName(spec), {
-      ...event.payload,
+      payload: event.payload,
       id: event.aggregateId,
     })
     .then(spec.readModelCreatedContinuation || defaultContinuation);
