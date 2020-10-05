@@ -1,8 +1,8 @@
-const { extractFieldNames } = require('./utils');
-
-const tableName = (spec) => spec.tableName || `CRUD_${spec.name}`;
-
-const defaultContinuation = () => undefined;
+const {
+  extractFieldNames,
+  tableName,
+  undefinedContinuation,
+} = require('./utils');
 
 const initHandler = (spec) => (store) =>
   store
@@ -10,7 +10,9 @@ const initHandler = (spec) => (store) =>
       indexes: { id: 'string' },
       fields: extractFieldNames(spec.fields),
     })
-    .then(() => (spec.readModelInitContinuation || defaultContinuation)(store));
+    .then(() =>
+      (spec.readModelInitContinuation || undefinedContinuation)(store)
+    );
 
 const createdHandler = (spec) => (store, event) =>
   store
@@ -18,17 +20,23 @@ const createdHandler = (spec) => (store, event) =>
       payload: event.payload,
       id: event.aggregateId,
     })
-    .then(spec.readModelCreatedContinuation || defaultContinuation);
+    .then(() =>
+      (spec.readModelCreatedContinuation || undefinedContinuation)(store, event)
+    );
 
 const updatedHandler = (spec) => (store, event) =>
   store
     .update(tableName(spec), { id: event.aggregateId }, { $set: event.payload })
-    .then(spec.readModelUpdatedContinuation || defaultContinuation);
+    .then(() =>
+      (spec.readModelUpdatedContinuation || undefinedContinuation)(store, event)
+    );
 
 const deletedHandler = (spec) => (store, event) =>
   store
     .delete(tableName(spec), { id: event.aggregateId })
-    .then(spec.readModelDeletedContinuation || defaultContinuation);
+    .then(() =>
+      (spec.readModelDeletedContinuation || undefinedContinuation)(store, event)
+    );
 
 const defaultEventName = (_, x) => x;
 

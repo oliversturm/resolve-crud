@@ -55,8 +55,8 @@ test('init handler with continuation', () => {
     defineTable: jest.fn(() => Promise.resolve()),
   };
 
-  return res.Init(store).then((pr) => {
-    expect(spec.readModelInitContinuation).toHaveBeenCalledTimes(1);
+  return res.Init(store).then(() => {
+    expect(spec.readModelInitContinuation).toHaveBeenCalledWith(store);
   });
 });
 
@@ -99,8 +99,11 @@ test('created handler with continuation', () => {
     payload: { val: 42 },
   };
 
-  return res.CRUD_PRODUCT_CREATED(store, event).then((pr) => {
-    expect(spec.readModelCreatedContinuation).toHaveBeenCalledTimes(1);
+  return res.CRUD_PRODUCT_CREATED(store, event).then(() => {
+    expect(spec.readModelCreatedContinuation).toHaveBeenCalledWith(
+      store,
+      event
+    );
   });
 });
 
@@ -148,8 +151,11 @@ test('updated handler with continuation', () => {
     payload: { val: 42 },
   };
 
-  return res.CRUD_PRODUCT_UPDATED(store, event).then((pr) => {
-    expect(spec.readModelUpdatedContinuation).toHaveBeenCalledTimes(1);
+  return res.CRUD_PRODUCT_UPDATED(store, event).then(() => {
+    expect(spec.readModelUpdatedContinuation).toHaveBeenCalledWith(
+      store,
+      event
+    );
   });
 });
 
@@ -191,7 +197,10 @@ test('deleted handler with continuation', () => {
     payload: {},
   };
 
-  return res.CRUD_PRODUCT_DELETED(store, event).then((pr) => {
-    expect(spec.readModelDeletedContinuation).toHaveBeenCalledTimes(1);
+  return res.CRUD_PRODUCT_DELETED(store, event).then(() => {
+    expect(spec.readModelDeletedContinuation).toHaveBeenCalledWith(
+      store,
+      event
+    );
   });
 });
